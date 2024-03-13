@@ -1,4 +1,3 @@
-use actix_web::dev::AppService;
 use config::Config;
 use secrecy::{ExposeSecret, Secret};
 use sqlx::postgres::{PgConnectOptions, PgSslMode};

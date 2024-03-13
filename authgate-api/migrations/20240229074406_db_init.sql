@@ -6,10 +6,27 @@
 -- @author: Stavros Grigoriou <unix121@protonmail.com>
 ----------------------------------------------------------------
 
+--------------
+-- Table: role
+--------------
+CREATE TABLE role
+(
+    role        VARCHAR(30) NOT NULL PRIMARY KEY,
+    description TEXT        NOT NULL,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+COMMENT ON TABLE role IS 'Roles of the application and registered applications';
+
+-- Insert the two basic roles of the application
+INSERT INTO role (role, description)
+VALUES ('AUTHGATE_ADMIN', 'Global administrator of the application'),
+       ('AUTHGATE_USER', 'Authgate registered user');
+
 ---------------
--- Table: users
+-- Table: user
 ---------------
-CREATE TABLE users
+CREATE TABLE "user"
 (
     id         UUID         NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
     username   VARCHAR(20) UNIQUE,
@@ -20,4 +37,18 @@ CREATE TABLE users
     created_at TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
-COMMENT ON TABLE users IS 'List of registered users of the application';
+COMMENT ON TABLE "user" IS 'List of registered users of the application';
+
+-------------------
+-- Table: user_role
+-------------------
+CREATE TABLE user_role
+(
+    user_id    UUID,
+    role       VARCHAR(30),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT user_role_pk PRIMARY KEY (user_id, role),
+    CONSTRAINT user_role_user_id_fk FOREIGN KEY (user_id) REFERENCES "user" (id),
+    CONSTRAINT user_role_role_fk FOREIGN KEY (role) REFERENCES role (role)
+);
+

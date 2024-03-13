@@ -1,4 +1,5 @@
 pub mod config;
 pub mod domain;
-pub mod routes;
+pub mod route;
+pub mod service;
 pub mod startup;

@@ -27,7 +27,7 @@ impl User {
             User,
             r#"
             SELECT u.*
-            FROM users u
+            FROM "user" u
             WHERE u.id = $1
             "#,
             id

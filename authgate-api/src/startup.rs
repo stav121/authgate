@@ -1,5 +1,6 @@
-use crate::config::settings::{ServerSettings, Settings};
-use crate::routes::actuator::health_check_handler;
+use crate::config::settings::Settings;
+use crate::route::actuator::health_check_handler;
+use crate::route::app::{authgate_initialize_handler, authgate_status_handler};
 use actix_cors::Cors;
 use actix_web::dev::Server;
 use actix_web::middleware::Logger;
@@ -9,10 +10,19 @@ use reqwest::header;
 use sqlx::PgPool;
 use std::net::TcpListener;
 
-pub struct AppState {}
+pub struct AppState {
+    pub db: PgPool,
+}
 
 fn create_config(conf: &mut ServiceConfig, settings: &Settings) {
-    conf.service(scope(&settings.server.api_prefix).service(health_check_handler));
+    conf.service(
+        scope(&settings.server.api_prefix)
+        /* Actuator */
+        .service(health_check_handler)
+        /* App */
+        .service(authgate_status_handler)
+        .service(authgate_initialize_handler),
+    );
 }
 
 pub async fn run(
@@ -32,7 +42,9 @@ pub async fn run(
             .supports_credentials();
 
         App::new()
-            .app_data(web::Data::new(AppState {}))
+            .app_data(web::Data::new(AppState {
+                db: pg_pool.clone(),
+            }))
             .configure(|c| create_config(c, &config))
             .wrap(cors)
             .wrap(Logger::default())

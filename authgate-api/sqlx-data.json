@@ -1,6 +1,24 @@
 {
   "db": "PostgreSQL",
-  "619abb60a7bc64180bc348b6e103c5db0bdf45283c187ee9d79381270fe63221": {
+  "264aa0580c7bc606e7f2f701ac80aa73fe2511e59a98fd41c5fd2c3ebcd8927d": {
+    "describe": {
+      "columns": [
+        {
+          "name": "is_initialized",
+          "ordinal": 0,
+          "type_info": "Bool"
+        }
+      ],
+      "nullable": [
+        null
+      ],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "\n            SELECT EXISTS(SELECT ur.role\n              FROM user_role ur\n              WHERE ur.role = 'AUTHGATE_ADMIN')\n           AS is_initialized\n            "
+  },
+  "54aa01127bac0ba9cf975710dcc324b82bc0d18d02df7db1fa7e0952ab6c825b": {
     "describe": {
       "columns": [
         {
@@ -54,6 +72,6 @@
         ]
       }
     },
-    "query": "\n            SELECT u.*\n            FROM users u\n            WHERE u.id = $1\n            "
+    "query": "\n            SELECT u.*\n            FROM \"user\" u\n            WHERE u.id = $1\n            "
   }
 }
