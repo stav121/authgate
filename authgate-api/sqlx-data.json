@@ -1,0 +1,77 @@
+{
+  "db": "PostgreSQL",
+  "264aa0580c7bc606e7f2f701ac80aa73fe2511e59a98fd41c5fd2c3ebcd8927d": {
+    "describe": {
+      "columns": [
+        {
+          "name": "is_initialized",
+          "ordinal": 0,
+          "type_info": "Bool"
+        }
+      ],
+      "nullable": [
+        null
+      ],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "\n            SELECT EXISTS(SELECT ur.role\n              FROM user_role ur\n              WHERE ur.role = 'AUTHGATE_ADMIN')\n           AS is_initialized\n            "
+  },
+  "54aa01127bac0ba9cf975710dcc324b82bc0d18d02df7db1fa7e0952ab6c825b": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "username",
+          "ordinal": 1,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "email",
+          "ordinal": 2,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "password",
+          "ordinal": 3,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "locked",
+          "ordinal": 4,
+          "type_info": "Bool"
+        },
+        {
+          "name": "last_login",
+          "ordinal": 5,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 6,
+          "type_info": "Timestamptz"
+        }
+      ],
+      "nullable": [
+        false,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Uuid"
+        ]
+      }
+    },
+    "query": "\n            SELECT u.*\n            FROM \"user\" u\n            WHERE u.id = $1\n            "
+  }
+}

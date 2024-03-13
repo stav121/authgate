@@ -1,0 +1,30 @@
+name: Rust Tests
+
+on:
+  push:
+    branches: [ feat/project-init ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup test database
+        run: |
+          cd authgate-api && docker-compose up -d
+
+      - name: Build
+        run: cd authgate-api && cargo build --verbose
+
+      - name: Run tests
+        run: cd authgate-api && SQLX_OFFLINE=true cargo test --verbose
+
